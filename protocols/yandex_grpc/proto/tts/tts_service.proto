@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package speechkit.tts.v3;
+
+import "tts/tts.proto";
+
+option go_package = "chat-ws-service/internal/infrastructure/providers/voice/yandex/proto/tts;tts";
+
+
+// A set of methods for voice synthesis.
+service Synthesizer {
+    // Synthesizing text into speech.
+    rpc UtteranceSynthesis (UtteranceSynthesisRequest) returns (stream UtteranceSynthesisResponse) {
+    }
+    // Bidirectional streaming RPC for real-time synthesis.
+    rpc StreamSynthesis(stream StreamSynthesisRequest) returns (stream StreamSynthesisResponse) {}
+}

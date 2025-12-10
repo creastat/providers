@@ -1,0 +1,124 @@
+syntax = "proto3";
+
+package yandex.cloud.ai.foundation_models.v1;
+
+option go_package = "github.com/creastat/providers/protocols/yandex_grpc/proto/generated/text_generation";
+
+// Message represents a single message in the conversation
+message Message {
+  // Role of the message author (e.g., "user", "assistant", "system")
+  string role = 1;
+  
+  // Content of the message
+  string content = 2;
+}
+
+// Tool represents a tool that the model can use
+message Tool {
+  // Name of the tool
+  string name = 1;
+  
+  // Description of what the tool does
+  string description = 2;
+  
+  // JSON schema for the tool's input parameters
+  string input_schema = 3;
+}
+
+// ToolChoice specifies how the model should select tools
+message ToolChoice {
+  oneof choice {
+    // Allow the model to choose whether to use tools
+    bool auto = 1;
+    
+    // Force the model to use a specific tool
+    string function_name = 2;
+    
+    // Force the model to not use any tools
+    bool none = 3;
+  }
+}
+
+// JsonSchema represents a JSON schema for response format
+message JsonSchema {
+  // The JSON schema as a string
+  string schema = 1;
+  
+  // Optional name for the schema
+  string name = 2;
+  
+  // Optional description
+  string description = 3;
+}
+
+// Alternative represents a single completion alternative
+message Alternative {
+  // The generated text
+  string message = 1;
+  
+  // Reason for completion (e.g., "stop", "length", "function_call")
+  string finish_reason = 2;
+}
+
+// ContentUsage represents token usage statistics
+message ContentUsage {
+  // Number of input tokens
+  int64 input_tokens = 1;
+  
+  // Number of output tokens
+  int64 output_tokens = 2;
+}
+
+// CompletionOptions contains options for text generation
+message CompletionOptions {
+  // Temperature for sampling (0.0 to 2.0)
+  float temperature = 1;
+  
+  // Maximum number of tokens to generate
+  int32 max_tokens = 2;
+  
+  // Top-p (nucleus) sampling parameter
+  float top_p = 3;
+}
+
+// Request for text completion
+message CompletionRequest {
+  // The model URI to use for completion
+  string model_uri = 1;
+  
+  // Completion options
+  CompletionOptions completion_options = 2;
+  
+  // Messages representing the conversation context
+  repeated Message messages = 3;
+  
+  // Available tools for the model
+  repeated Tool tools = 4;
+  
+  // Response format specification
+  oneof response_format {
+    // Request JSON object response
+    bool json_object = 5;
+    
+    // Request response matching a JSON schema
+    JsonSchema json_schema = 6;
+  }
+}
+
+// Response containing completion results
+message CompletionResponse {
+  // Generated completion alternatives
+  repeated Alternative alternatives = 1;
+  
+  // Token usage statistics
+  ContentUsage usage = 2;
+  
+  // Model version
+  string model_version = 3;
+}
+
+// Service for text generation
+service TextGenerationService {
+  // Synchronous text completion
+  rpc Completion(CompletionRequest) returns (stream CompletionResponse);
+}

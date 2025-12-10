@@ -1,0 +1,5 @@
+syntax = "proto3";
+
+package speechkit.stt.v3;
+
+option go_package = "chat-ws-service/internal/infrastructure/providers/voice/yandex/proto/generated/stt";
