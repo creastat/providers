@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package speechkit.tts.v3;
 
-option go_package = "chat-ws-service/internal/infrastructure/providers/voice/yandex/proto/tts;tts";
+option go_package = "chat-service/internal/infrastructure/providers/voice/yandex/proto/tts;tts";
 
 message AudioContent {
     // The audio source to read the data from.

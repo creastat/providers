@@ -7,11 +7,12 @@
 package tts
 
 import (
-	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
-	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
+
+	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
+	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 )
 
 const (
@@ -1783,7 +1784,7 @@ const file_tts_tts_proto_rawDesc = "" +
 	"\x19LoudnessNormalizationType\x12+\n" +
 	"'LOUDNESS_NORMALIZATION_TYPE_UNSPECIFIED\x10\x00\x12\f\n" +
 	"\bMAX_PEAK\x10\x01\x12\b\n" +
-	"\x04LUFS\x10\x02BNZLchat-ws-service/internal/infrastructure/providers/voice/yandex/proto/tts;ttsb\x06proto3"
+	"\x04LUFS\x10\x02BNZLchat-service/internal/infrastructure/providers/voice/yandex/proto/tts;ttsb\x06proto3"
 
 var (
 	file_tts_tts_proto_rawDescOnce sync.Once

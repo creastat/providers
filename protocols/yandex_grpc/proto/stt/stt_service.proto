@@ -4,7 +4,7 @@ package speechkit.stt.v3;
 
 import "stt/stt.proto";
 
-option go_package = "chat-ws-service/internal/infrastructure/providers/voice/yandex/proto/generated/stt";
+option go_package = "chat-service/internal/infrastructure/providers/voice/yandex/proto/generated/stt";
 
 // A set of methods for streaming speech recognition.
 service Recognizer {
