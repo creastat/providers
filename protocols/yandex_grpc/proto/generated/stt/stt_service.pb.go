@@ -7,11 +7,10 @@
 package stt
 
 import (
-	reflect "reflect"
-	unsafe "unsafe"
-
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	reflect "reflect"
+	unsafe "unsafe"
 )
 
 const (
@@ -28,7 +27,7 @@ const file_stt_stt_service_proto_rawDesc = "" +
 	"\x15stt/stt_service.proto\x12\x10speechkit.stt.v3\x1a\rstt/stt.proto2q\n" +
 	"\n" +
 	"Recognizer\x12c\n" +
-	"\x12RecognizeStreaming\x12\".speechkit.stt.v3.StreamingRequest\x1a#.speechkit.stt.v3.StreamingResponse\"\x00(\x010\x01BTZRchat-service/internal/infrastructure/providers/voice/yandex/proto/generated/sttb\x06proto3"
+	"\x12RecognizeStreaming\x12\".speechkit.stt.v3.StreamingRequest\x1a#.speechkit.stt.v3.StreamingResponse\"\x00(\x010\x01BQZOchat-service/internal/infrastructure/providers/voice/yandex/proto/generated/sttb\x06proto3"
 
 var file_stt_stt_service_proto_goTypes = []any{
 	(*StreamingRequest)(nil),  // 0: speechkit.stt.v3.StreamingRequest

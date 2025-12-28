@@ -8,7 +8,6 @@ package tts
 
 import (
 	context "context"
-
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -123,7 +122,7 @@ func RegisterSynthesizerServer(s grpc.ServiceRegistrar, srv SynthesizerServer) {
 	s.RegisterService(&Synthesizer_ServiceDesc, srv)
 }
 
-func _Synthesizer_UtteranceSynthesis_Handler(srv any, stream grpc.ServerStream) error {
+func _Synthesizer_UtteranceSynthesis_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(UtteranceSynthesisRequest)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
@@ -134,7 +133,7 @@ func _Synthesizer_UtteranceSynthesis_Handler(srv any, stream grpc.ServerStream) 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type Synthesizer_UtteranceSynthesisServer = grpc.ServerStreamingServer[UtteranceSynthesisResponse]
 
-func _Synthesizer_StreamSynthesis_Handler(srv any, stream grpc.ServerStream) error {
+func _Synthesizer_StreamSynthesis_Handler(srv interface{}, stream grpc.ServerStream) error {
 	return srv.(SynthesizerServer).StreamSynthesis(&grpc.GenericServerStream[StreamSynthesisRequest, StreamSynthesisResponse]{ServerStream: stream})
 }
 

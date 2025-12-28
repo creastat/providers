@@ -7,11 +7,10 @@
 package stt
 
 import (
-	reflect "reflect"
-	unsafe "unsafe"
-
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	reflect "reflect"
+	unsafe "unsafe"
 )
 
 const (
@@ -25,7 +24,7 @@ var File_stt_package_options_proto protoreflect.FileDescriptor
 
 const file_stt_package_options_proto_rawDesc = "" +
 	"\n" +
-	"\x19stt/package_options.proto\x12\x10speechkit.stt.v3BTZRchat-service/internal/infrastructure/providers/voice/yandex/proto/generated/sttb\x06proto3"
+	"\x19stt/package_options.proto\x12\x10speechkit.stt.v3BQZOchat-service/internal/infrastructure/providers/voice/yandex/proto/generated/sttb\x06proto3"
 
 var file_stt_package_options_proto_goTypes = []any{}
 var file_stt_package_options_proto_depIdxs = []int32{

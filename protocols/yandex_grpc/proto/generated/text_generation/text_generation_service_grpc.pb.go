@@ -8,7 +8,6 @@ package text_generation
 
 import (
 	context "context"
-
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -102,7 +101,7 @@ func RegisterTextGenerationServiceServer(s grpc.ServiceRegistrar, srv TextGenera
 	s.RegisterService(&TextGenerationService_ServiceDesc, srv)
 }
 
-func _TextGenerationService_Completion_Handler(srv any, stream grpc.ServerStream) error {
+func _TextGenerationService_Completion_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(CompletionRequest)
 	if err := stream.RecvMsg(m); err != nil {
 		return err

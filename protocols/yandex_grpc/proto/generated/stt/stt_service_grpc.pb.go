@@ -8,7 +8,6 @@ package stt
 
 import (
 	context "context"
-
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -96,7 +95,7 @@ func RegisterRecognizerServer(s grpc.ServiceRegistrar, srv RecognizerServer) {
 	s.RegisterService(&Recognizer_ServiceDesc, srv)
 }
 
-func _Recognizer_RecognizeStreaming_Handler(srv any, stream grpc.ServerStream) error {
+func _Recognizer_RecognizeStreaming_Handler(srv interface{}, stream grpc.ServerStream) error {
 	return srv.(RecognizerServer).RecognizeStreaming(&grpc.GenericServerStream[StreamingRequest, StreamingResponse]{ServerStream: stream})
 }
 

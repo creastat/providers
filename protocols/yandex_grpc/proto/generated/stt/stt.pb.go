@@ -7,13 +7,12 @@
 package stt
 
 import (
-	reflect "reflect"
-	sync "sync"
-	unsafe "unsafe"
-
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	structpb "google.golang.org/protobuf/types/known/structpb"
+	reflect "reflect"
+	sync "sync"
+	unsafe "unsafe"
 )
 
 const (
@@ -4310,7 +4309,7 @@ const file_stt_stt_proto_rawDesc = "" +
 	"\aWORKING\x10\x01\x12\v\n" +
 	"\aWARNING\x10\x02\x12\n" +
 	"\n" +
-	"\x06CLOSED\x10\x03BTZRchat-service/internal/infrastructure/providers/voice/yandex/proto/generated/sttb\x06proto3"
+	"\x06CLOSED\x10\x03BQZOchat-service/internal/infrastructure/providers/voice/yandex/proto/generated/sttb\x06proto3"
 
 var (
 	file_stt_stt_proto_rawDescOnce sync.Once

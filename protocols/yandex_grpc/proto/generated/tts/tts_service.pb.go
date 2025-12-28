@@ -7,11 +7,10 @@
 package tts
 
 import (
-	reflect "reflect"
-	unsafe "unsafe"
-
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	reflect "reflect"
+	unsafe "unsafe"
 )
 
 const (
@@ -28,7 +27,7 @@ const file_tts_tts_service_proto_rawDesc = "" +
 	"\x15tts/tts_service.proto\x12\x10speechkit.tts.v3\x1a\rtts/tts.proto2\xf0\x01\n" +
 	"\vSynthesizer\x12s\n" +
 	"\x12UtteranceSynthesis\x12+.speechkit.tts.v3.UtteranceSynthesisRequest\x1a,.speechkit.tts.v3.UtteranceSynthesisResponse\"\x000\x01\x12l\n" +
-	"\x0fStreamSynthesis\x12(.speechkit.tts.v3.StreamSynthesisRequest\x1a).speechkit.tts.v3.StreamSynthesisResponse\"\x00(\x010\x01BNZLchat-service/internal/infrastructure/providers/voice/yandex/proto/tts;ttsb\x06proto3"
+	"\x0fStreamSynthesis\x12(.speechkit.tts.v3.StreamSynthesisRequest\x1a).speechkit.tts.v3.StreamSynthesisResponse\"\x00(\x010\x01BKZIchat-service/internal/infrastructure/providers/voice/yandex/proto/tts;ttsb\x06proto3"
 
 var file_tts_tts_service_proto_goTypes = []any{
 	(*UtteranceSynthesisRequest)(nil),  // 0: speechkit.tts.v3.UtteranceSynthesisRequest
