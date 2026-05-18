@@ -7,8 +7,8 @@ import (
 	"io"
 	"sync"
 
-	"github.com/creastat/providers/core"
-	stt "github.com/creastat/providers/protocols/yandex_grpc/proto/generated/stt"
+	"github.com/madmike/go-ai-providers/core"
+	stt "github.com/madmike/go-ai-providers/protocols/yandex_grpc/proto/generated/stt"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"

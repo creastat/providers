@@ -1,6 +1,6 @@
 package openai_api
 
-import "github.com/creastat/providers/core"
+import "github.com/madmike/go-ai-providers/core"
 
 // ProtocolMetadata contains metadata about the OpenAI API protocol
 type ProtocolMetadata struct {

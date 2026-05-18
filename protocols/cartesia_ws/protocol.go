@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/creastat/providers/core"
+	"github.com/madmike/go-ai-providers/core"
 )
 
 // Protocol implements the Cartesia WebSocket protocol for TTS

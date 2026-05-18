@@ -7,8 +7,8 @@ import (
 	"io"
 	"sync"
 
-	"github.com/creastat/providers/core"
-	tts "github.com/creastat/providers/protocols/yandex_grpc/proto/generated/tts"
+	"github.com/madmike/go-ai-providers/core"
+	tts "github.com/madmike/go-ai-providers/protocols/yandex_grpc/proto/generated/tts"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
@@ -155,9 +155,12 @@ type yandexTTSStream struct {
 	doneCh     chan struct{}
 	mu         sync.Mutex
 	closed     bool
+	finished   bool
 	ctx        context.Context
 	wg         sync.WaitGroup
 	closeOnce  sync.Once
+	doneOnce   sync.Once
+	finishOnce sync.Once
 }
 
 // Send sends text to be synthesized
@@ -166,6 +169,10 @@ func (c *yandexTTSStream) Send(ctx context.Context, text string) error {
 	if c.closed {
 		c.mu.Unlock()
 		return fmt.Errorf("TTS stream is closed")
+	}
+	if c.finished {
+		c.mu.Unlock()
+		return fmt.Errorf("TTS stream input already finished")
 	}
 
 	// Initialize stream on first Send
@@ -195,6 +202,33 @@ func (c *yandexTTSStream) Send(ctx context.Context, text string) error {
 	}
 
 	return nil
+}
+
+// Finish signals that no more text will be sent to the stream.
+func (c *yandexTTSStream) Finish(ctx context.Context) error {
+	c.mu.Lock()
+	if c.closed {
+		c.mu.Unlock()
+		return fmt.Errorf("TTS stream is closed")
+	}
+	stream := c.stream
+	c.mu.Unlock()
+
+	// Nothing to finish if stream has not been initialized (no text sent).
+	if stream == nil {
+		return nil
+	}
+
+	var finishErr error
+	c.finishOnce.Do(func() {
+		c.mu.Lock()
+		c.finished = true
+		c.mu.Unlock()
+		if err := stream.CloseSend(); err != nil {
+			finishErr = fmt.Errorf("failed to finish stream: %w", err)
+		}
+	})
+	return finishErr
 }
 
 // initStream initializes the streaming synthesis connection
@@ -266,6 +300,9 @@ func (c *yandexTTSStream) buildSynthesisOptions() *tts.SynthesisOptions {
 // receiveAudio receives audio chunks from the stream
 func (c *yandexTTSStream) receiveAudio() {
 	defer c.wg.Done()
+	defer c.closeOnce.Do(func() {
+		close(c.audioCh)
+	})
 
 	for {
 		resp, err := c.stream.Recv()
@@ -315,20 +352,23 @@ func (c *yandexTTSStream) Close() error {
 	c.closed = true
 	c.mu.Unlock()
 
-	// Close the send side of the stream
+	// Signal termination to internal goroutines first.
+	c.doneOnce.Do(func() {
+		close(c.doneCh)
+	})
+
+	// Close send side if it has been initialized.
 	if c.stream != nil {
-		c.stream.CloseSend()
+		_ = c.Finish(context.Background())
 	}
 
 	// Wait for receiver goroutine
 	c.wg.Wait()
 
-	// Close audioCh only once
+	// Close audio channel for streams that were never initialized.
 	c.closeOnce.Do(func() {
 		close(c.audioCh)
 	})
-
-	close(c.doneCh)
 
 	// Close the connection
 	if c.conn != nil {

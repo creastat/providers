@@ -4,14 +4,14 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/creastat/providers/core"
-	"github.com/creastat/providers/protocols/cartesia_ws"
-	"github.com/creastat/providers/protocols/deepgram_ws"
-	"github.com/creastat/providers/protocols/elevenlabs_ws"
-	"github.com/creastat/providers/protocols/gemini_api"
-	"github.com/creastat/providers/protocols/minimax_ws"
-	"github.com/creastat/providers/protocols/openai_api"
-	"github.com/creastat/providers/protocols/yandex_grpc"
+	"github.com/madmike/go-ai-providers/core"
+	"github.com/madmike/go-ai-providers/protocols/cartesia_ws"
+	"github.com/madmike/go-ai-providers/protocols/deepgram_ws"
+	"github.com/madmike/go-ai-providers/protocols/elevenlabs_ws"
+	"github.com/madmike/go-ai-providers/protocols/gemini_api"
+	"github.com/madmike/go-ai-providers/protocols/minimax_ws"
+	"github.com/madmike/go-ai-providers/protocols/openai_api"
+	"github.com/madmike/go-ai-providers/protocols/yandex_grpc"
 )
 
 // ProtocolFactory is a function that creates a protocol instance
@@ -89,11 +89,12 @@ func CreateFromDB(dbConfig DBProviderConfig) (core.Provider, error) {
 }
 
 // CreateFromPreset creates a provider instance from a preset name and API key
-func CreateFromPreset(presetName, displayName, apiKey string, options map[string]any, logger any) (core.Provider, error) {
+func CreateFromPreset(presetName, displayName, apiKey string, baseURL string, options map[string]any, logger any) (core.Provider, error) {
 	return CreateFromDB(DBProviderConfig{
 		PresetName:  presetName,
 		DisplayName: displayName,
 		APIKey:      apiKey,
+		BaseURL:     baseURL,
 		Options:     options,
 		Logger:      logger,
 	})

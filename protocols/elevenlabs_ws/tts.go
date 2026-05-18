@@ -8,9 +8,9 @@ import (
 	"io"
 	"sync"
 
-	"github.com/creastat/infra/telemetry"
-	"github.com/creastat/providers/core"
 	"github.com/gorilla/websocket"
+	"github.com/madmike/go-ai-providers/core"
+	"github.com/madmike/go-infra/telemetry"
 )
 
 // Synthesize implements TTSProvider.Synthesize (one-shot)
@@ -71,8 +71,11 @@ func (p *Protocol) StreamSynthesize(ctx context.Context, req core.TTSRequest) (c
 	}
 
 	// Construct WebSocket URL
-	// wsURL := fmt.Sprintf("wss://api.elevenlabs.io/v1/text-to-speech/%s/stream-input?model_id=%s&language_code=%s", voiceID, modelID, req.Language)
-	wsURL := fmt.Sprintf("wss://api.elevenlabs.io/v1/text-to-speech/%s/stream-input?output_format=pcm_24000", voiceID)
+	outputFormat := "pcm_24000"
+	if fmt, ok := req.Options["output_format"].(string); ok && fmt != "" {
+		outputFormat = fmt
+	}
+	wsURL := fmt.Sprintf("wss://api.elevenlabs.io/v1/text-to-speech/%s/stream-input?output_format=%s", voiceID, outputFormat)
 
 	if p.logger != nil {
 		if logger, ok := p.logger.(telemetry.Logger); ok {

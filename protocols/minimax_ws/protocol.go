@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"slices"
 
-	"github.com/creastat/providers/core"
+	"github.com/madmike/go-ai-providers/core"
 )
 
 // Protocol implements the Minimax WebSocket protocol for TTS

@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/creastat/providers/core"
+	"github.com/madmike/go-ai-providers/core"
 	"github.com/sashabaranov/go-openai"
 )
 
@@ -43,5 +43,9 @@ func (p *Protocol) GenerateEmbedding(ctx context.Context, req core.EmbeddingRequ
 	return &core.EmbeddingResponse{
 		Vector: vector,
 		Model:  req.Model,
+		Usage: &core.Usage{
+			InputTokens: resp.Usage.PromptTokens,
+			TotalTokens: resp.Usage.TotalTokens,
+		},
 	}, nil
 }

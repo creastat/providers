@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/creastat/providers/core"
+	"github.com/madmike/go-ai-providers/core"
 	"google.golang.org/genai"
 )
 

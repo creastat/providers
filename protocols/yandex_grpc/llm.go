@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/creastat/providers/core"
-	pb "github.com/creastat/providers/protocols/yandex_grpc/proto/generated/text_generation"
+	"github.com/madmike/go-ai-providers/core"
+	pb "github.com/madmike/go-ai-providers/protocols/yandex_grpc/proto/generated/text_generation"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/metadata"
@@ -57,6 +57,9 @@ func (p *Protocol) ChatCompletion(ctx context.Context, req core.ChatRequest) (*c
 		ModelUri:          req.Model,
 		CompletionOptions: completionOpts,
 		Messages:          messages,
+	}
+	if req.JSONMode {
+		pbReq.ResponseFormat = &pb.CompletionRequest_JsonObject{JsonObject: true}
 	}
 
 	// Add authorization metadata
@@ -156,6 +159,9 @@ func (p *Protocol) StreamChatCompletion(ctx context.Context, req core.ChatReques
 		ModelUri:          req.Model,
 		CompletionOptions: completionOpts,
 		Messages:          messages,
+	}
+	if req.JSONMode {
+		pbReq.ResponseFormat = &pb.CompletionRequest_JsonObject{JsonObject: true}
 	}
 
 	// Add authorization metadata

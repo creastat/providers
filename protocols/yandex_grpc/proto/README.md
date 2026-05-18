@@ -39,16 +39,16 @@ Import the generated types in your Go code:
 
 ```go
 // For LLM
-import pb "github.com/creastat/providers/protocols/yandex_grpc/proto/generated/text_generation"
+import pb "github.com/madmike/go-ai-providers/protocols/yandex_grpc/proto/generated/text_generation"
 
 // For Embeddings
-import pb "github.com/creastat/providers/protocols/yandex_grpc/proto/generated/embedding"
+import pb "github.com/madmike/go-ai-providers/protocols/yandex_grpc/proto/generated/embedding"
 
 // For STT
-import pb "github.com/creastat/providers/protocols/yandex_grpc/proto/generated/stt"
+import pb "github.com/madmike/go-ai-providers/protocols/yandex_grpc/proto/generated/stt"
 
 // For TTS
-import pb "github.com/creastat/providers/protocols/yandex_grpc/proto/generated/tts"
+import pb "github.com/madmike/go-ai-providers/protocols/yandex_grpc/proto/generated/tts"
 ```
 
 ## Changes from Official Yandex Protos

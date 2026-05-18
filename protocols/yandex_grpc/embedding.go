@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/creastat/providers/core"
-	pb "github.com/creastat/providers/protocols/yandex_grpc/proto/generated/embedding"
+	"github.com/madmike/go-ai-providers/core"
+	pb "github.com/madmike/go-ai-providers/protocols/yandex_grpc/proto/generated/embedding"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/protobuf/types/known/wrapperspb"
 )

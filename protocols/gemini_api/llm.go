@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"iter"
 
-	"github.com/creastat/providers/core"
+	"github.com/madmike/go-ai-providers/core"
 	"google.golang.org/genai"
 )
 
@@ -41,6 +41,10 @@ func (p *Protocol) ChatCompletion(ctx context.Context, req core.ChatRequest) (*c
 	if req.TopP != nil {
 		topP := float32(*req.TopP)
 		config.TopP = &topP
+	}
+
+	if req.JSONMode {
+		config.ResponseMIMEType = "application/json"
 	}
 
 	// Generate response
@@ -108,6 +112,10 @@ func (p *Protocol) StreamChatCompletion(ctx context.Context, req core.ChatReques
 	if req.TopP != nil {
 		topP := float32(*req.TopP)
 		config.TopP = &topP
+	}
+
+	if req.JSONMode {
+		config.ResponseMIMEType = "application/json"
 	}
 
 	// Start streaming

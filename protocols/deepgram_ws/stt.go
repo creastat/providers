@@ -9,9 +9,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/creastat/infra/telemetry"
-	"github.com/creastat/providers/core"
 	"github.com/gorilla/websocket"
+	"github.com/madmike/go-ai-providers/core"
+	"github.com/madmike/go-infra/telemetry"
 )
 
 // Transcribe implements STTProvider.Transcribe (one-shot)
@@ -69,7 +69,7 @@ func (p *Protocol) StreamTranscribe(ctx context.Context, req core.STTRequest) (c
 		sampleRate = 16000
 	}
 	encoding := req.Encoding
-	if encoding == "" || encoding == "raw" || encoding == "pcm" {
+	if encoding == "" || encoding == "raw" || encoding == "pcm" || encoding == "pcm16" {
 		encoding = "linear16"
 	}
 
@@ -84,6 +84,29 @@ func (p *Protocol) StreamTranscribe(ctx context.Context, req core.STTRequest) (c
 	query.Set("punctuate", "true")
 	query.Set("smart_format", "true")
 
+	// Real-time / VOIP streaming options. All configurable via req.Options with
+	// sensible low-latency defaults suitable for the VOIP agent use case.
+	// See https://developers.deepgram.com/reference/listen-live-streaming
+	applyOpt := func(key string, def string) {
+		if v, ok := stringOpt(req.Options, key); ok {
+			if v != "" {
+				query.Set(key, v)
+			}
+			return
+		}
+		if def != "" {
+			query.Set(key, def)
+		}
+	}
+	applyOpt("interim_results", "true")  // stream partial hypotheses
+	applyOpt("vad_events", "true")       // SpeechStarted events
+	applyOpt("endpointing", "300")       // ms of silence → final
+	applyOpt("utterance_end_ms", "1000") // UtteranceEnd event threshold
+	applyOpt("filler_words", "")         // off by default; caller may opt in
+	applyOpt("no_delay", "true")         // prioritise low latency
+	applyOpt("diarize", "")
+	applyOpt("numerals", "")
+
 	// Add keyterms if provided
 	if len(req.Keyterms) > 0 {
 		for _, keyterm := range req.Keyterms {
@@ -92,6 +115,9 @@ func (p *Protocol) StreamTranscribe(ctx context.Context, req core.STTRequest) (c
 	}
 
 	u.RawQuery = query.Encode()
+
+	p.logger.Debug("Deepgram connect params",
+		telemetry.String("url", u.String()))
 
 	// Validate API key
 	if p.apiKey == "" {
@@ -132,6 +158,7 @@ func (p *Protocol) StreamTranscribe(ctx context.Context, req core.STTRequest) (c
 	}
 
 	go client.readMessages()
+	go client.keepAliveLoop()
 
 	return client, nil
 }
@@ -168,6 +195,23 @@ func (c *deepgramSTTStream) Receive(ctx context.Context) (*core.STTChunk, error)
 	}
 }
 
+// Finalize implements core.FinalizableSTTStream. Sends Deepgram's Finalize
+// control message, which flushes buffered audio and forces an is_final
+// response for the current segment without closing the stream. Intended
+// for callers with client-side VAD that want to bypass Deepgram's own
+// endpointing latency on short utterances.
+// See https://developers.deepgram.com/docs/finalize
+func (c *deepgramSTTStream) Finalize(ctx context.Context) error {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	if c.closed {
+		return fmt.Errorf("stream closed")
+	}
+	msg := map[string]any{"type": "Finalize"}
+	jsonData, _ := json.Marshal(msg)
+	return c.conn.WriteMessage(websocket.TextMessage, jsonData)
+}
+
 func (c *deepgramSTTStream) Close() error {
 	c.mu.Lock()
 	if c.closed {
@@ -199,6 +243,28 @@ func (c *deepgramSTTStream) Close() error {
 	c.conn.SetReadDeadline(time.Now())
 	err := c.conn.Close()
 	return err
+}
+
+func (c *deepgramSTTStream) keepAliveLoop() {
+	ticker := time.NewTicker(10 * time.Second)
+	defer ticker.Stop()
+
+	for {
+		select {
+		case <-ticker.C:
+			c.mu.Lock()
+			if c.closed {
+				c.mu.Unlock()
+				return
+			}
+			keepAliveMsg := map[string]string{"type": "KeepAlive"}
+			jsonData, _ := json.Marshal(keepAliveMsg)
+			_ = c.conn.WriteMessage(websocket.TextMessage, jsonData)
+			c.mu.Unlock()
+		case <-c.doneCh:
+			return
+		}
+	}
 }
 
 func (c *deepgramSTTStream) readMessages() {
@@ -248,8 +314,53 @@ func (c *deepgramSTTStream) readMessages() {
 						return
 					}
 				}
+			} else if msgType == "SpeechStarted" {
+				select {
+				case c.resultCh <- &core.STTChunk{EventType: "speech_started"}:
+				case <-c.doneCh:
+					return
+				}
+			} else if msgType == "UtteranceEnd" {
+				select {
+				case c.resultCh <- &core.STTChunk{EventType: "utterance_end"}:
+				case <-c.doneCh:
+					return
+				}
 			}
+			// Other message types (Metadata, etc.) are
+			// ignored by the STT channel.
 		}
+	}
+}
+
+// stringOpt pulls a string value from the request options map, accepting
+// either native strings or bool/number shapes that Deepgram expects as
+// lowercase strings in the query params.
+func stringOpt(opts map[string]any, key string) (string, bool) {
+	if opts == nil {
+		return "", false
+	}
+	v, ok := opts[key]
+	if !ok {
+		return "", false
+	}
+	switch x := v.(type) {
+	case string:
+		return x, true
+	case bool:
+		if x {
+			return "true", true
+		}
+		return "false", true
+	case int:
+		return fmt.Sprintf("%d", x), true
+	case int64:
+		return fmt.Sprintf("%d", x), true
+	case float64:
+		// query params for ms thresholds arrive as JSON numbers → floats
+		return fmt.Sprintf("%d", int64(x)), true
+	default:
+		return fmt.Sprintf("%v", x), true
 	}
 }
 

@@ -1,6 +1,6 @@
 package yandex_grpc
 
-import "github.com/creastat/providers/core"
+import "github.com/madmike/go-ai-providers/core"
 
 // ProtocolMetadata contains metadata about the Yandex gRPC protocol
 type ProtocolMetadata struct {

@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/creastat/providers/core"
-	"github.com/creastat/providers/factory"
+	"github.com/madmike/go-ai-providers/core"
+	"github.com/madmike/go-ai-providers/factory"
 )
 
 // Example_basicUsage demonstrates basic provider usage
@@ -14,7 +14,7 @@ func Example_basicUsage() {
 	ctx := context.Background()
 
 	// Create provider from preset
-	provider, err := factory.CreateFromPreset("openai", "OpenAI Main", "sk-...", nil, nil)
+	provider, err := factory.CreateFromPreset("openai", "OpenAI Main", "sk-...", "", nil, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -48,7 +48,7 @@ func Example_basicUsage() {
 func Example_streaming() {
 	ctx := context.Background()
 
-	provider, _ := factory.CreateFromPreset("openai", "OpenAI", "sk-...", nil, nil)
+	provider, _ := factory.CreateFromPreset("openai", "OpenAI", "sk-...", "", nil, nil)
 	provider.Initialize(ctx, core.ProviderConfig{APIKey: "sk-..."})
 	defer provider.Close()
 
@@ -84,11 +84,11 @@ func Example_multipleProviders() {
 	registry := core.NewRegistry()
 
 	// Register multiple providers
-	openai, _ := factory.CreateFromPreset("openai", "OpenAI", "sk-...", nil, nil)
+	openai, _ := factory.CreateFromPreset("openai", "OpenAI", "sk-...", "", nil, nil)
 	openai.Initialize(ctx, core.ProviderConfig{APIKey: "sk-..."})
 	registry.Register(openai)
 
-	yandex, _ := factory.CreateFromPreset("yandex-llm", "Yandex", "AQVN...", map[string]any{
+	yandex, _ := factory.CreateFromPreset("yandex-llm", "Yandex", "AQVN...", "", map[string]any{
 		"folder_id": "b1g...",
 	}, nil)
 	yandex.Initialize(ctx, core.ProviderConfig{

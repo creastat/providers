@@ -4,7 +4,7 @@ package yandex.cloud.ai.foundation_models.v1;
 
 import "google/protobuf/wrappers.proto";
 
-option go_package = "github.com/creastat/providers/protocols/yandex_grpc/proto/generated/embedding";
+option go_package = "github.com/madmike/go-ai-providers/protocols/yandex_grpc/proto/generated/embedding";
 
 // Request for obtaining text embeddings
 message TextEmbeddingRequest {

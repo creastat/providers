@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package speechkit.stt.v3;
 
-option go_package = "chat-service/internal/infrastructure/providers/voice/yandex/proto/generated/stt";
+option go_package = "github.com/madmike/go-ai-providers/protocols/yandex_grpc/proto/generated/stt";
 
 import "google/protobuf/struct.proto";
 

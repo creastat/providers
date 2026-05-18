@@ -49,8 +49,8 @@ services/libraries/providers/
 
 ```go
 import (
-    "github.com/creastat/providers/core"
-    "github.com/creastat/providers/factory"
+    "github.com/madmike/go-ai-providers/core"
+    "github.com/madmike/go-ai-providers/factory"
 )
 ```
 
@@ -136,9 +136,9 @@ if stt, ok := provider.(core.STTProvider); ok {
 
 ## 🛠️ Integration Guide
 
-### For Services (`chat-service`, `ingestion-service`)
+### For Services (`agent-runtime`, `ingestion-service`)
 
-1.  **Add Dependency**: Add `github.com/creastat/providers` to your service's `go.mod`
+1.  **Add Dependency**: Add `github.com/madmike/go-ai-providers` to your service's `go.mod`
 2.  **Remove Local Providers**: Delete legacy provider implementations in your service.
 3.  **Update Config**: Ensure your database `providers` table matches the `DBProviderConfig` structure (needs `preset_name`, `api_key`, `options` JSON).
 4.  **Switch to Factory**: Replace manual struct initialization with `factory.CreateFromDB`.

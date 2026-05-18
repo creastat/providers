@@ -19,4 +19,5 @@ type EmbeddingRequest struct {
 type EmbeddingResponse struct {
 	Vector []float32
 	Model  string
+	Usage  *Usage
 }

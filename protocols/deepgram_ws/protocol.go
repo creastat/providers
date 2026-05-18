@@ -4,11 +4,11 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/creastat/infra/telemetry"
-	"github.com/creastat/providers/core"
+	"github.com/madmike/go-ai-providers/core"
+	"github.com/madmike/go-infra/telemetry"
 )
 
-// Protocol implements the Deepgram WebSocket protocol for STT
+// Protocol implements the Deepgram WebSocket protocol for STT and TTS.
 type Protocol struct {
 	name         string
 	apiKey       string
@@ -35,6 +35,7 @@ func NewProtocol(config core.ProviderConfig) (core.Provider, error) {
 		apiKey: config.APIKey,
 		capabilities: []core.Capability{
 			core.CapabilitySTT,
+			core.CapabilityTTS,
 		},
 		initialized: false,
 		logger:      logger,

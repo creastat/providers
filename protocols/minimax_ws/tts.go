@@ -9,9 +9,9 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/creastat/infra/telemetry"
-	"github.com/creastat/providers/core"
 	"github.com/gorilla/websocket"
+	"github.com/madmike/go-ai-providers/core"
+	"github.com/madmike/go-infra/telemetry"
 )
 
 // Synthesize implements TTSProvider.Synthesize (one-shot)

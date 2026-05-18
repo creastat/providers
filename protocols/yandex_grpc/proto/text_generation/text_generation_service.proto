@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package yandex.cloud.ai.foundation_models.v1;
 
-option go_package = "github.com/creastat/providers/protocols/yandex_grpc/proto/generated/text_generation";
+option go_package = "github.com/madmike/go-ai-providers/protocols/yandex_grpc/proto/generated/text_generation";
 
 // Message represents a single message in the conversation
 message Message {

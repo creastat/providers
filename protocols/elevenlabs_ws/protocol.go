@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/creastat/infra/telemetry"
-	"github.com/creastat/providers/core"
+	"github.com/madmike/go-ai-providers/core"
+	"github.com/madmike/go-infra/telemetry"
 )
 
 // Protocol implements the ElevenLabs WebSocket protocol

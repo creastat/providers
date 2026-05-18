@@ -8,9 +8,9 @@ import (
 	"io"
 	"sync"
 
-	"github.com/creastat/infra/telemetry"
-	"github.com/creastat/providers/core"
 	"github.com/gorilla/websocket"
+	"github.com/madmike/go-ai-providers/core"
+	"github.com/madmike/go-infra/telemetry"
 )
 
 // Transcribe implements STTProvider.Transcribe (one-shot) - Not efficiently supported by ElevenLabs stream API, but we can wrap it
