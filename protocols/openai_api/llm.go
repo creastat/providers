@@ -63,9 +63,10 @@ func (p *Protocol) ChatCompletion(ctx context.Context, req core.ChatRequest) (*c
 		out.Usage = usage
 	}
 	for _, tc := range choice.Message.ToolCalls {
+		name := strings.ReplaceAll(tc.Function.Name, "__", ":")
 		out.ToolCalls = append(out.ToolCalls, core.ToolCall{
 			ID:    tc.ID,
-			Name:  tc.Function.Name,
+			Name:  name,
 			Input: tc.Function.Arguments,
 		})
 	}
@@ -211,9 +212,10 @@ func (s *chatStream) assembleToolCalls() []core.ToolCall {
 	out := make([]core.ToolCall, 0, len(s.toolAcc))
 	for i := 0; i < len(s.toolAcc); i++ {
 		acc := s.toolAcc[i]
+		name := strings.ReplaceAll(acc.name, "__", ":")
 		out = append(out, core.ToolCall{
 			ID:    acc.id,
-			Name:  acc.name,
+			Name:  name,
 			Input: acc.args.String(),
 		})
 	}
@@ -236,11 +238,12 @@ func toOpenAIMessages(msgs []core.Message) []openai.ChatCompletionMessage {
 			ToolCallID: m.ToolCallID,
 		}
 		for _, tc := range m.ToolCalls {
+			name := strings.ReplaceAll(tc.Name, ":", "__")
 			om.ToolCalls = append(om.ToolCalls, openai.ToolCall{
 				ID:   tc.ID,
 				Type: openai.ToolTypeFunction,
 				Function: openai.FunctionCall{
-					Name:      tc.Name,
+					Name:      name,
 					Arguments: tc.Input,
 				},
 			})
@@ -257,10 +260,11 @@ func toOpenAITools(tools []core.Tool) []openai.Tool {
 	}
 	out := make([]openai.Tool, len(tools))
 	for i, t := range tools {
+		name := strings.ReplaceAll(t.Name, ":", "__")
 		out[i] = openai.Tool{
 			Type: openai.ToolTypeFunction,
 			Function: &openai.FunctionDefinition{
-				Name:        t.Name,
+				Name:        name,
 				Description: t.Description,
 				Parameters:  t.InputSchema,
 			},
