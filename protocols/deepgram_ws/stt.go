@@ -28,7 +28,7 @@ func (p *Protocol) Transcribe(ctx context.Context, req core.STTRequest) (*core.S
 
 	// Send audio
 	if req.Audio != nil {
-		stream.Send(ctx, req.Audio)
+		_ = stream.Send(ctx, req.Audio)
 	}
 
 	// Collect results
@@ -223,7 +223,7 @@ func (c *deepgramSTTStream) Close() error {
 	// Send close message to signal end of audio
 	closeMsg := map[string]any{"type": "CloseStream"}
 	jsonData, _ := json.Marshal(closeMsg)
-	c.conn.WriteMessage(websocket.TextMessage, jsonData)
+	_ = c.conn.WriteMessage(websocket.TextMessage, jsonData)
 
 	// Wait for readMessages goroutine to finish receiving results with timeout
 	select {
@@ -240,7 +240,7 @@ func (c *deepgramSTTStream) Close() error {
 	defer c.mu.Unlock()
 	c.closed = true
 	// Force close immediately by setting deadline
-	c.conn.SetReadDeadline(time.Now())
+	_ = c.conn.SetReadDeadline(time.Now())
 	err := c.conn.Close()
 	return err
 }

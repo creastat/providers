@@ -124,11 +124,10 @@ type toolAccumulator struct {
 // sawFinish is set when finish_reason arrives; Done is only signalled on
 // io.EOF so the usage chunk that follows finish_reason is always captured.
 type chatStream struct {
-	stream     *openai.ChatCompletionStream
-	toolAcc    map[int]*toolAccumulator
-	usage      *core.Usage
-	sawFinish  bool
-	finishTool bool // finish_reason was "tool_calls"
+	stream    *openai.ChatCompletionStream
+	toolAcc   map[int]*toolAccumulator
+	usage     *core.Usage
+	sawFinish bool
 }
 
 func (s *chatStream) Receive(ctx context.Context) (*core.ChatChunk, error) {

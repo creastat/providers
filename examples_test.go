@@ -49,7 +49,7 @@ func Example_streaming() {
 	ctx := context.Background()
 
 	provider, _ := factory.CreateFromPreset("openai", "OpenAI", "sk-...", "", nil, nil)
-	provider.Initialize(ctx, core.ProviderConfig{APIKey: "sk-..."})
+	_ = provider.Initialize(ctx, core.ProviderConfig{APIKey: "sk-..."})
 	defer provider.Close()
 
 	llmProvider := provider.(core.LLMProvider)
@@ -85,17 +85,17 @@ func Example_multipleProviders() {
 
 	// Register multiple providers
 	openai, _ := factory.CreateFromPreset("openai", "OpenAI", "sk-...", "", nil, nil)
-	openai.Initialize(ctx, core.ProviderConfig{APIKey: "sk-..."})
-	registry.Register(openai)
+	_ = openai.Initialize(ctx, core.ProviderConfig{APIKey: "sk-..."})
+	_ = registry.Register(openai)
 
 	yandex, _ := factory.CreateFromPreset("yandex-llm", "Yandex", "AQVN...", "", map[string]any{
 		"folder_id": "b1g...",
 	}, nil)
-	yandex.Initialize(ctx, core.ProviderConfig{
+	_ = yandex.Initialize(ctx, core.ProviderConfig{
 		APIKey:  "AQVN...",
 		Options: map[string]any{"folder_id": "b1g..."},
 	})
-	registry.Register(yandex)
+	_ = registry.Register(yandex)
 
 	// Use different providers
 	openaiProvider, _ := registry.Get("OpenAI")

@@ -281,7 +281,7 @@ func (c *yandexSTTStream) Close() error {
 	close(c.doneCh)
 
 	if c.stream != nil {
-		c.stream.CloseSend()
+		_ = c.stream.CloseSend()
 	}
 
 	if c.conn != nil {

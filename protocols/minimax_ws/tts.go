@@ -27,7 +27,7 @@ func (p *Protocol) Synthesize(ctx context.Context, req core.TTSRequest) (*core.T
 	defer stream.Close()
 
 	// Send text
-	stream.Send(ctx, req.Text)
+	_ = stream.Send(ctx, req.Text)
 
 	// Collect audio
 	var audioData []byte

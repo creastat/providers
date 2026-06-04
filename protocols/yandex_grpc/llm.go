@@ -228,8 +228,7 @@ func (p *Protocol) createGRPCConnection(ctx context.Context) (*grpc.ClientConn, 
 	// Use TLS for secure connection
 	creds := credentials.NewClientTLSFromCert(nil, "")
 
-	conn, err := grpc.DialContext(
-		ctx,
+	conn, err := grpc.NewClient(
 		"llm.api.cloud.yandex.net:50051",
 		grpc.WithTransportCredentials(creds),
 	)
